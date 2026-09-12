@@ -1,5 +1,12 @@
+import json
 import requests
-
-response = requests.get("https://api.wheretheiss.at/v1/satellites/25544")
-data = response.json()
-print(data)
+ 
+r = requests.get("https://api.wheretheiss.at/v1/satellites/25544")
+r.raise_for_status()
+ 
+data = r.json()
+ 
+with open("iss_track.json", "w") as file:
+    json.dump(data, file, indent=4) 
+print("Saved to iss_track.json:")
+print(json.dumps(data, indent=4))
