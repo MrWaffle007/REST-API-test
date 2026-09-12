@@ -5,8 +5,26 @@ r = requests.get("https://api.wheretheiss.at/v1/satellites/25544")
 r.raise_for_status()
  
 data = r.json()
- 
-with open("iss_track.json", "w") as file:
-    json.dump(data, file, indent=4) 
-print("Saved to iss_track.json:")
-print(json.dumps(data, indent=4))
+
+fields = list(data.keys()) # list of fields in the JSON response
+
+print("Fields in the JSON response:") #prints list of fields in the JSON
+for field in fields:
+    print(field)
+
+print("\nwhich fields are you interested in?")
+choice = input("Enter the field names separated by spaces: ").split() # splits the input into a list of field names
+
+if choice == "":
+    chosen_fields = fields
+else:
+    chosen_fields = [field for field in choice if field in fields] # filters the chosen fields to only include those that are in the list of fields
+
+choice_data = {field: data[field] for field in chosen_fields} # creates a new dictionary with only the chosen fields and their corresponding values
+
+
+with open("iss_track.json", "w") as file: # opens a file called iss_track.json in write mode
+    json.dump(choice_data, file, indent=4)
+
+print(f"\nData for the chosen fields has been saved to 'iss_track.json'.")
+print(json.dumps(choice_data, indent=4))
